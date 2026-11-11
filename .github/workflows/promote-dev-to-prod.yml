@@ -1,0 +1,31 @@
+name: Promote dev to prod
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  promote-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out selected branch
+        uses: actions/checkout@v7.0.1
+
+      - name: Copy dev versions to prod
+        run: |
+          cp dev/service-foo-version prod/service-foo-version
+          cp dev/service-bar-version prod/service-bar-version
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prod/service-foo-version prod/service-bar-version
+          if git diff --cached --quiet; then
+            echo "No version changes to promote."
+            exit 0
+          fi
+          git commit -m "chore: promote dev versions to prod"
+          git push origin "HEAD:$GITHUB_REF"
