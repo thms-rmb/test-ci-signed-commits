@@ -10,6 +10,10 @@ inputs:
   ref:
     description: Full target branch ref, for example refs/heads/main.
     required: true
+  working-directory:
+    description: Directory containing the staged Git changes.
+    required: false
+    default: .
   message:
     description: Commit message.
     required: false
@@ -19,6 +23,7 @@ runs:
   steps:
     - name: Create commit and update branch
       shell: bash
+      working-directory: ${{ inputs.working-directory }}
       env:
         GH_TOKEN: ${{ inputs.token }}
         TARGET_REPOSITORY: ${{ inputs.repository }}
