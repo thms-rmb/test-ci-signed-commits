@@ -23,10 +23,11 @@ jobs:
           fi
           printf '%s\n' "$((version + 1))" > dev/service-foo-version
 
-      - name: Commit and push
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dev/service-foo-version
-          git commit -m "chore: update service-foo version in dev"
-          git push origin "HEAD:$GITHUB_REF"
+      - name: Stage service-foo version
+        run: git add dev/service-foo-version
+
+      - name: Commit staged changes using REST
+        uses: ./.github/actions/commit-staged-using-rest
+        with:
+          token: ${{ github.token }}
+          message: "chore: update service-foo version in dev"
