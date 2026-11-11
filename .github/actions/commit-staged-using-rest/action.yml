@@ -4,6 +4,12 @@ inputs:
   token:
     description: Token used by the GitHub CLI to access the GitHub API.
     required: true
+  repository:
+    description: Target repository in owner/name format.
+    required: true
+  ref:
+    description: Full target branch ref, for example refs/heads/main.
+    required: true
   message:
     description: Commit message.
     required: false
@@ -15,6 +21,8 @@ runs:
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.token }}
+        TARGET_REPOSITORY: ${{ inputs.repository }}
+        TARGET_REF: ${{ inputs.ref }}
         COMMIT_MESSAGE: ${{ inputs.message }}
       run: |
         if [[ -z "${GH_TOKEN:-}" ]]; then

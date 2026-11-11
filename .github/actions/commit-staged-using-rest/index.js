@@ -102,7 +102,7 @@ function treeType(mode) {
 
 function apiRef(repository, gitRef) {
   if (!gitRef.startsWith("refs/heads/") || gitRef.length === "refs/heads/".length) {
-    throw new Error(`Expected GITHUB_REF to be a branch ref, received: ${gitRef || "(empty)"}`);
+    throw new Error(`Expected ref input to be a branch ref, received: ${gitRef || "(empty)"}`);
   }
 
   const encodedRef = gitRef
@@ -118,12 +118,12 @@ function main() {
     throw new Error("The token input must not be empty.");
   }
 
-  const repository = process.env.GITHUB_REPOSITORY;
+  const repository = process.env.TARGET_REPOSITORY;
   if (!repository || !/^[^/]+\/[^/]+$/.test(repository)) {
-    throw new Error("GITHUB_REPOSITORY must contain an owner and repository name.");
+    throw new Error("The repository input must contain an owner and repository name.");
   }
 
-  const gitRef = process.env.GITHUB_REF;
+  const gitRef = process.env.TARGET_REF;
   const refEndpoint = apiRef(repository, gitRef || "");
   const changes = stagedChanges();
   if (changes.length === 0) {

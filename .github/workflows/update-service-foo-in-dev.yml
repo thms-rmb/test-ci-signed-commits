@@ -30,4 +30,6 @@ jobs:
         uses: ./.github/actions/commit-staged-using-rest
         with:
           token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          ref: ${{ github.ref }}
           message: "chore: update service-foo version in dev"
