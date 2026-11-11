@@ -1,0 +1,24 @@
+name: commit-staged-using-rest
+description: Creates a commit from staged changes with GitHub's Git Database API and updates the selected branch.
+inputs:
+  token:
+    description: Token used by the GitHub CLI to access the GitHub API.
+    required: true
+  message:
+    description: Commit message.
+    required: false
+    default: Update staged files
+runs:
+  using: composite
+  steps:
+    - name: Create commit and update branch
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        COMMIT_MESSAGE: ${{ inputs.message }}
+      run: |
+        if [[ -z "${GH_TOKEN:-}" ]]; then
+          echo "::error::The token input must not be empty."
+          exit 1
+        fi
+        node "$GITHUB_ACTION_PATH/index.js"
