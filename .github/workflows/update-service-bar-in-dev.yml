@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   update-version:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
       - name: Check out selected branch
         uses: actions/checkout@v7.0.1
